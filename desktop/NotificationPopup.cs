@@ -17,16 +17,16 @@ sealed class PersonaNotice : Form {
  readonly Font titleFont=new Font("Segoe UI",15,FontStyle.Bold);
  readonly Font bodyFont=new Font("Segoe UI",10.5f);
  readonly Font actionFont=new Font("Segoe UI",9,FontStyle.Bold);
- readonly Color red=Color.FromArgb(236,20,57);
+ readonly Color red=Color.FromArgb(168,79,115);
  readonly Button open=new Button(), dismiss=new Button(), close=new Button();
  public PersonaNotice(){
   FormBorderStyle=FormBorderStyle.None;ShowInTaskbar=false;TopMost=true;
-  AutoScaleMode=AutoScaleMode.None;BackColor=Color.FromArgb(18,18,22);DoubleBuffered=true;
+  AutoScaleMode=AutoScaleMode.None;BackColor=Color.FromArgb(255,250,253);DoubleBuffered=true;
   float scale;using(var g=CreateGraphics())scale=g.DpiX/96f;
   ClientSize=new Size((int)(420*scale),(int)(202*scale));
   Configure(open,"Abrir WhatsApp  →",new Rectangle(24,151,177,34),red,Color.White,scale);
-  Configure(dismiss,"No mostrar",new Rectangle(217,151,116,34),Color.FromArgb(35,35,42),Color.FromArgb(210,210,216),scale);
-  Configure(close,"×",new Rectangle(376,12,30,30),BackColor,Color.FromArgb(185,185,195),scale);
+  Configure(dismiss,"No mostrar",new Rectangle(217,151,116,34),Color.FromArgb(224,241,229),Color.FromArgb(73,63,73),scale);
+  Configure(close,"×",new Rectangle(376,12,30,30),BackColor,Color.FromArgb(112,100,112),scale);
   close.Font=titleFont;close.AccessibleName="Cerrar notificación";dismiss.AccessibleDescription="Desactivar los avisos emergentes del tema";
   open.Click+=(s,e)=>{Dismiss();OpenWhatsApp();};
   close.Click+=(s,e)=>Dismiss();
@@ -39,7 +39,7 @@ sealed class PersonaNotice : Form {
   button.Text=text;button.Font=actionFont;button.FlatStyle=FlatStyle.Flat;button.FlatAppearance.BorderSize=0;
   button.BackColor=background;button.ForeColor=foreground;button.Cursor=Cursors.Hand;
   button.Bounds=new Rectangle((int)(rect.X*scale),(int)(rect.Y*scale),(int)(rect.Width*scale),(int)(rect.Height*scale));
-  button.FlatAppearance.MouseOverBackColor=background==red?Color.FromArgb(255,43,77):Color.FromArgb(51,51,61);
+  button.FlatAppearance.MouseOverBackColor=background==red?Color.FromArgb(145,65,98):Color.FromArgb(245,220,231);
   button.UseVisualStyleBackColor=false;button.MouseEnter+=(s,e)=>life.Stop();button.MouseLeave+=(s,e)=>ResumeLife();Controls.Add(button);
  }
  void ResumeLife(){if(Visible&&!ClientRectangle.Contains(PointToClient(Cursor.Position))){life.Stop();life.Start();}}
@@ -55,19 +55,19 @@ sealed class PersonaNotice : Form {
  protected override void OnPaint(PaintEventArgs e){base.OnPaint(e);var g=e.Graphics;
   g.ScaleTransform(ClientSize.Width/420f,ClientSize.Height/202f);g.SmoothingMode=SmoothingMode.AntiAlias;
   g.TextRenderingHint=System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-  using(var edge=new Pen(Color.FromArgb(62,62,70)))g.DrawRectangle(edge,.5f,.5f,419,201);
+  using(var edge=new Pen(Color.FromArgb(237,179,200)))g.DrawRectangle(edge,.5f,.5f,419,201);
   using(var accent=new SolidBrush(red)){
    g.FillRectangle(accent,0,0,4,202);
    g.FillPolygon(accent,new[]{new Point(24,17),new Point(55,17),new Point(50,37),new Point(19,37)});
   }
-  using(var tag=new Font("Segoe UI",9,FontStyle.Bold))g.DrawString("P5",tag,Brushes.White,26,19);
-  using(var muted=new SolidBrush(Color.FromArgb(164,164,178)))g.DrawString("NUEVO MENSAJE",labelFont,muted,65,20);
+  using(var tag=new Font("Segoe UI",9,FontStyle.Bold))g.DrawString("PL",tag,Brushes.White,26,19);
+  using(var muted=new SolidBrush(Color.FromArgb(112,100,112)))g.DrawString("NUEVO MENSAJE",labelFont,muted,65,20);
   using(var format=new StringFormat{Trimming=StringTrimming.EllipsisCharacter,FormatFlags=StringFormatFlags.NoWrap})
-   g.DrawString(heading,titleFont,Brushes.White,new RectangleF(24,49,366,30),format);
+   g.DrawString(heading,titleFont,Brushes.Black,new RectangleF(24,49,366,30),format);
   using(var format=new StringFormat{Trimming=StringTrimming.EllipsisCharacter,FormatFlags=StringFormatFlags.LineLimit})
-  using(var text=new SolidBrush(Color.FromArgb(207,207,216)))
+  using(var text=new SolidBrush(Color.FromArgb(73,63,73)))
    g.DrawString(body,bodyFont,text,new RectangleF(24,88,367,46),format);
-  using(var line=new Pen(Color.FromArgb(44,44,53)))g.DrawLine(line,24,140,396,140);
+  using(var line=new Pen(Color.FromArgb(237,179,200)))g.DrawLine(line,24,140,396,140);
  }
  protected override void Dispose(bool disposing){if(disposing){life.Dispose();labelFont.Dispose();titleFont.Dispose();bodyFont.Dispose();actionFont.Dispose();}base.Dispose(disposing);}
  [DllImport("user32.dll")]static extern bool ShowWindowAsync(IntPtr h,int command);
@@ -78,7 +78,7 @@ static class NotificationProgram {
  [STAThread]static void Main(string[] args){
   Application.EnableVisualStyles();
   if(args.Length==2&&args[0]=="--preview"){
-   using(var sample=new PersonaNotice()){sample.Present("Aviso de prueba","Nuevo mensaje con el estilo Persona 5.");
+   using(var sample=new PersonaNotice()){sample.Present("Aviso de prueba","Nuevo mensaje con el estilo Theme_Playera_Whatsapp.");
     using(var bitmap=new Bitmap(sample.Width,sample.Height)){sample.DrawToBitmap(bitmap,new Rectangle(Point.Empty,sample.Size));bitmap.Save(args[1]);}}
    return;
   }

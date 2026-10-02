@@ -2,11 +2,37 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {stat} from 'node:fs/promises';
-import {buildSource} from './apply-theme.mjs';
-test('la ilustracion queda por debajo del limite de las variables CSS', async () => {
-  const image = await stat(new URL('./assets/city-mono.jpg',import.meta.url));
-  // Chromium rejects custom-property values larger than roughly 1 MiB.
-  assert.ok(Math.ceil(image.size / 3) * 4 < 750000);
+import {buildSource, evaluateWhenReady} from './apply-theme.mjs';
+
+test('la insercion espera al contexto inicial y a las navegaciones', async () => {
+  let calls = 0;
+  const client = {async send(method, params) {
+    assert.equal(method, 'Runtime.evaluate');
+    assert.equal(params.expression, 'theme');
+    calls++;
+    if (calls === 1) throw Error('Cannot find default execution context');
+    if (calls === 2) throw Error('Execution context was destroyed.');
+    return {};
+  }};
+  await evaluateWhenReady(client, 'theme', 1000, 1);
+  assert.equal(calls, 3);
+});
+
+test('la espera es limitada y no oculta errores de insercion', async () => {
+  await assert.rejects(evaluateWhenReady({send:async()=>{throw Error('Cannot find default execution context');}}, '', 0), /default execution context/);
+  await assert.rejects(evaluateWhenReady({send:async()=>{throw Error('Connection closed');}}, ''), /Connection closed/);
+  await assert.rejects(evaluateWhenReady({send:async()=>({exceptionDetails:{text:'SyntaxError'}})}, ''), /No se pudo insertar/);
+});
+test('el fondo PNG se incrusta directamente sin limite de variable CSS', async () => {
+  const image = await stat(new URL('./assets/playera-fullscreen_HD.png',import.meta.url));
+  assert.ok(image.size > 0);
+  const source = await buildSource();
+  assert.ok(source.includes('background-image:url('));
+  // A var() in the same declaration makes Chromium resolve the large PNG as
+  // variable data again; dimming must remain in a separate declaration.
+  assert.ok(!/background-image:[^}]*var\(--playera-dim/.test(source));
+  assert.ok(source.includes('data:image/png;base64,'));
+  assert.ok(!source.includes('--p5-wallpaper:'));
 });
 
 function environment(origin = 'https://web.whatsapp.com', readyState = 'complete') {
@@ -44,7 +70,7 @@ test('reaplicar reemplaza el estilo y respeta modo ligero', async () => {
   vm.runInNewContext(await buildSource(true),context);
   assert.equal(context.elements.size,1);
   assert.equal(context.attributes.has('data-p5-lite'),true);
-  assert.match(context.elements.get('p5-desktop-theme').textContent,/data:image\/svg\+xml;base64/);
+  assert.match(context.elements.get('p5-desktop-theme').textContent,/data:image\/png;base64/);
   vm.runInNewContext(await buildSource(false),context);
   assert.equal(context.attributes.has('data-p5-lite'),false);
 });

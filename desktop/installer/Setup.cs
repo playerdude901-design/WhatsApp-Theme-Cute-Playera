@@ -8,11 +8,11 @@ using System.Reflection;
 using System.Windows.Forms;
 
 static class Bundle {
- public static string Destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Programs\WhatsAppPersona5\desktop");
+ public static string Destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Programs\Theme_Playera_Whatsapp\desktop");
  public static string PendingReport = "";
  public static void Run(bool verify, bool autoStart = true) {
   PendingReport="";
-  string temp = Path.Combine(Path.GetTempPath(), "WhatsAppPersona5-" + Guid.NewGuid().ToString("N"));
+  string temp = Path.Combine(Path.GetTempPath(), "Theme_Playera_Whatsapp-" + Guid.NewGuid().ToString("N"));
   Directory.CreateDirectory(temp);
   try {
    string zip = Path.Combine(temp,"package.zip");
@@ -27,14 +27,14 @@ static class Bundle {
     p.WaitForExit(); System.Threading.Tasks.Task.WaitAll(stdout,stderr);
     if(p.ExitCode!=0) {
      string detail=stderr.Result.Length>0?stderr.Result:stdout.Result;
-     string reportPath=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WhatsAppPersona5", "install-error.log");
+     string reportPath=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Theme_Playera_Whatsapp", "install-error.log");
      string saved="";
      try { Directory.CreateDirectory(Path.GetDirectoryName(reportPath)); File.WriteAllText(reportPath, "Fecha: "+DateTimeOffset.Now.ToString("o")+Environment.NewLine+"Salida: "+p.ExitCode+Environment.NewLine+detail+Environment.NewLine+stdout.Result); saved="\n\nInforme guardado en:\n"+reportPath; } catch { }
      if(p.ExitCode==2 && !verify) { PendingReport=detail+saved; return; }
      throw new Exception(detail+saved);
     }
    }
-  } finally { try { if(temp.StartsWith(Path.Combine(Path.GetTempPath(),"WhatsAppPersona5-"),StringComparison.OrdinalIgnoreCase))Directory.Delete(temp,true); } catch {} }
+  } finally { try { if(temp.StartsWith(Path.Combine(Path.GetTempPath(),"Theme_Playera_Whatsapp-"),StringComparison.OrdinalIgnoreCase))Directory.Delete(temp,true); } catch {} }
  }
  public static string PowerShell() { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System),@"WindowsPowerShell\v1.0\powershell.exe"); }
  public static void Launch() {
@@ -42,20 +42,20 @@ static class Bundle {
  }
 }
 class Installer : Form {
- readonly Color red=Color.FromArgb(224,5,37);
+ readonly Color red=Color.FromArgb(237,179,200);
  Panel content; Label step; Button next,back; CheckBox consent, startupChoice; bool autoStart=true; ProgressBar progress; int page=0; bool busy=false;
  public Installer() {
-  Text="WhatsApp Persona 5 · Instalador"; ClientSize=new Size(740,540); MinimumSize=Size; MaximumSize=Size;
+  Text="Theme_Playera_Whatsapp · Instalador"; ClientSize=new Size(740,540); MinimumSize=Size; MaximumSize=Size;
   Icon=System.Drawing.Icon.ExtractAssociatedIcon(Application.ExecutablePath);
   StartPosition=FormStartPosition.CenterScreen; FormBorderStyle=FormBorderStyle.FixedSingle; MaximizeBox=false;
-  AutoScaleMode=AutoScaleMode.Dpi; Font=new Font("Segoe UI",10); BackColor=Color.FromArgb(15,15,18); ForeColor=Color.White;
+  AutoScaleMode=AutoScaleMode.Dpi; Font=new Font("Segoe UI",10); BackColor=Color.FromArgb(255,250,253); ForeColor=Color.FromArgb(73,63,73);
   var banner=new Panel {Dock=DockStyle.Top,Height=98,BackColor=red}; Controls.Add(banner);
-  banner.Controls.Add(new Label {Text="WHATSAPP / PERSONA 5",Font=new Font("Segoe UI",23,FontStyle.Bold),AutoSize=true,Location=new Point(26,12)});
+  banner.Controls.Add(new Label {Text="PLAYERA / WHATSAPP",Font=new Font("Segoe UI",23,FontStyle.Bold),AutoSize=true,Location=new Point(26,12)});
   step=new Label {AutoSize=true,Location=new Point(29,64)};banner.Controls.Add(step);
   content=new Panel {Location=new Point(28,116),Size=new Size(684,340)};Controls.Add(content);
-  next=new Button {Text="Comenzar",Location=new Point(504,474),Size=new Size(206,42),FlatStyle=FlatStyle.Flat,BackColor=red,ForeColor=Color.White};
+  next=new Button {Text="Comenzar",Location=new Point(504,474),Size=new Size(206,42),FlatStyle=FlatStyle.Flat,BackColor=red,ForeColor=Color.FromArgb(73,63,73)};
   next.FlatAppearance.BorderSize=0;next.Click+=Next; Controls.Add(next);
-  back=new Button {Text="Salir",Location=new Point(28,474),Size=new Size(125,42),FlatStyle=FlatStyle.Flat,ForeColor=Color.White};
+  back=new Button {Text="Salir",Location=new Point(28,474),Size=new Size(125,42),FlatStyle=FlatStyle.Flat,ForeColor=Color.FromArgb(73,63,73)};
   back.Click+=(s,e)=>{if(page==1){page=0;Render();}else Close();};Controls.Add(back);
   FormClosing+=(s,e)=>{if(busy)e.Cancel=true;}; Render();
  }
@@ -66,7 +66,7 @@ class Installer : Form {
   content.Controls.Clear(); next.Enabled=true; back.Enabled=true;
   if(page==0) {
    step.Text="1 / 3   BIENVENIDA";next.Text="Comenzar";back.Text="Salir";
-   Label("Tu WhatsApp, con estilo Persona 5.",0,44,21,true);
+   Label("Tu WhatsApp, con colores pastel.",0,44,21,true);
    Label("Instala el tema en unos pasos. No necesitas escribir comandos,\nelegir carpetas ni instalar programas adicionales.",60,64,12,false);
    Label("Antes de empezar",145,32,13,true);
    Label("• Necesitas Windows de 64 bits.\n• Ten WhatsApp oficial instalado desde Microsoft Store.\n• Los accesos se crean en Inicio y, si es posible, en el escritorio.\n• Tus conversaciones y tu cuenta permanecen en WhatsApp.",186,130,11,false);
@@ -74,10 +74,10 @@ class Installer : Form {
    step.Text="2 / 3   ANTES DE INSTALAR";next.Text="Instalar tema";back.Text="Atrás";next.Enabled=false;
    Label("Una cosa que debes saber",0,40,20,true);
    Label("El tema abre WhatsApp con una conexión de depuración local.\nPermite cambiar su aspecto, pero otros programas de tu PC\npodrían acceder a esa ventana mientras esté abierta.",55,85,12,false);
-   Label("Para desactivarla, usa «WhatsApp - Restaurar normal».\nCerrar solo la ventana puede dejar WhatsApp en la bandeja.\nSe consulta GitHub al abrir el tema para avisar de actualizaciones.",151,80,11,false);
-   consent=new CheckBox {Text="Entiendo y quiero instalar el tema en este equipo.",Location=new Point(0,235),Size=new Size(675,30),ForeColor=Color.White};
+   Label("Para desactivarla, usa «WhatsApp - Restaurar normal».\nCerrar solo la ventana puede dejar WhatsApp en la bandeja.\nLas actualizaciones del tema aun no estan configuradas.",151,80,11,false);
+   consent=new CheckBox {Text="Entiendo y quiero instalar el tema en este equipo.",Location=new Point(0,235),Size=new Size(675,30),ForeColor=Color.FromArgb(73,63,73)};
    consent.CheckedChanged+=(s,e)=>next.Enabled=consent.Checked;content.Controls.Add(consent);
-   startupChoice=new CheckBox {Text="Abrir WhatsApp con Persona 5 al iniciar Windows",Checked=autoStart,Location=new Point(0,272),Size=new Size(675,30),ForeColor=Color.White}; startupChoice.CheckedChanged+=(s,e)=>autoStart=startupChoice.Checked;content.Controls.Add(startupChoice);
+   startupChoice=new CheckBox {Text="Abrir WhatsApp con Theme_Playera_Whatsapp al iniciar Windows",Checked=autoStart,Location=new Point(0,272),Size=new Size(675,30),ForeColor=Color.FromArgb(73,63,73)}; startupChoice.CheckedChanged+=(s,e)=>autoStart=startupChoice.Checked;content.Controls.Add(startupChoice);
    Label("Proyecto no oficial. No requiere permisos de administrador.",310,28,9,false);
   } else if(page==2) {
    step.Text="3 / 3   INSTALANDO";next.Text="Instalando…";next.Enabled=false;back.Enabled=false;
@@ -92,7 +92,7 @@ class Installer : Form {
    step.Text="LISTO PARA USAR";next.Text="Abrir WhatsApp";back.Text="Terminar";
    Label("¡Ya está instalado!",0,46,24,true);
    Label("Busca estos accesos en el menú Inicio:",68,32,12,false);
-   Label("WhatsApp Persona 5\nEl tema completo con animaciones.\n\nWhatsApp Persona 5 - Ligero\nEl mismo diseño sin animaciones.\n\nWhatsApp - Restaurar normal\nAbre WhatsApp sin tema ni depuración.\n\nBuscar actualizaciones: consulta nuevas versiones en GitHub.",109,230,10,false);
+   Label("Theme_Playera_Whatsapp\nEl tema completo con animaciones.\n\nTheme_Playera_Whatsapp - Ligero\nEl mismo diseño sin animaciones.\n\nWhatsApp - Restaurar normal\nAbre WhatsApp sin tema ni depuración.\n\nActualizaciones propias: pendientes de configurar.",109,230,10,false);
   }
  }
  void Next(object sender,EventArgs e) {
@@ -112,7 +112,7 @@ class Installer : Form {
 }
 static class Setup {
  [STAThread] static int Main(string[] args) {
-  if(args.Length==1&&args[0]=="--verify") {try{Bundle.Run(true);return 0;}catch(Exception e){File.WriteAllText(Path.Combine(Path.GetTempPath(),"WhatsAppPersona5-verify.txt"),e.ToString());return 1;}}
+  if(args.Length==1&&args[0]=="--verify") {try{Bundle.Run(true);return 0;}catch(Exception e){File.WriteAllText(Path.Combine(Path.GetTempPath(),"Theme_Playera_Whatsapp-verify.txt"),e.ToString());return 1;}}
   Application.EnableVisualStyles(); Application.SetCompatibleTextRenderingDefault(false);
   Application.Run(new Installer());return 0;
  }

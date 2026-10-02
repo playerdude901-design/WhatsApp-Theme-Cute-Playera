@@ -1,0 +1,279 @@
+/* Theme_Playera_Whatsapp. Preserve internal attributes for engine compatibility. */
+html[data-p5-desktop] {
+  --playera-pink: #f45b69;
+  --playera-blue: #52489c;
+  --playera-green: #59c3c3;
+  --playera-background: #ebebeb;
+  --playera-contact: #4062bb;
+  --playera-secondary: #52489c;
+  --playera-selection-border: #f45b69;
+  /* Chat artwork is embedded by apply-theme.mjs; the intro keeps a plain background. */
+  --playera-wallpaper: none;
+}
+html[data-p5-desktop], html[data-p5-desktop] body, html[data-p5-desktop] #app {
+  color-scheme: light !important; color: #493f49 !important;
+  font-family: "Segoe UI", sans-serif;
+  --WDS-accent: #4062bb !important; --WDS-accent-RGB: 64,98,187 !important;
+  --WDS-content-default: #493f49 !important; --WDS-content-default-RGB: 73,63,73 !important;
+  --WDS-content-deemphasized: #706470 !important; --WDS-content-deemphasized-RGB: 112,100,112 !important;
+  --WDS-content-action-default: #52489c !important;
+  --WDS-content-action-emphasized: #4062bb !important;
+  --WDS-content-on-accent: #fff !important;
+  --WDS-content-external-link: #285f8a !important;
+  --WDS-surface-default: #ebebeb !important; --WDS-surface-default-RGB: 235,235,235 !important;
+  --WDS-surface-emphasized: #fbeaf1 !important;
+  --WDS-surface-elevated-default: #ebebeb !important;
+  --WDS-surface-elevated-emphasized: #fbeaf1 !important;
+  --WDS-background-wash-plain: #ebebeb !important;
+  --WDS-background-wash-inset: #ebebeb !important;
+  --WDS-components-surface-nav-bar: #fbeaf1 !important;
+  --WDS-systems-chat-surface-composer: #ebebeb !important;
+  --WDS-systems-chat-background-wallpaper: #ebebeb !important;
+  --WDS-systems-bubble-surface-incoming: #52489c !important;
+  --WDS-systems-bubble-surface-outgoing: #59c3c3 !important;
+  --WDS-systems-bubble-content-deemphasized: #706470 !important;
+  --primary: #493f49 !important; --primary-strong: #493f49 !important;
+  --secondary: #706470 !important; --text-primary: #493f49 !important; --text-secondary: #706470 !important;
+  --icon: #52489c !important; --icon-strong: #52489c !important; --icon-ack: #061a40 !important;
+  --panel-background: #ebebeb !important; --panel-background-lighter: #fbeaf1 !important;
+  --background-default: #ebebeb !important; --background-default-hover: #fbeaf1 !important;
+  --background-default-active: #f5dce7 !important;
+  --dropdown-background: #ebebeb !important; --dropdown-background-hover: #fbeaf1 !important;
+  --input-background: #ebebeb !important; --input-placeholder: #706470 !important;
+  --search-input-background: #ebebeb !important;
+  --incoming-background: #52489c !important; --outgoing-background: #59c3c3 !important;
+  --incoming-primary: #493f49 !important; --outgoing-primary: #493f49 !important;
+  --message-primary: #493f49 !important; --bubble-meta: #706470 !important;
+  --quoted-message-text: #493f49 !important; --quoted-message-background: #ebebeb !important;
+  --button-primary-background: #4062bb !important; --button-primary: #fff !important;
+  --unread-marker-background: #4062bb !important; --unread-marker-text: #fff !important;
+}
+html[data-p5-desktop] :is(#side,[data-testid="chatlist-header"],[data-testid="conversation-header"],[data-testid="compose-box"]) {
+  background: #ebebeb !important; border-color: var(--playera-pink) !important;
+}
+/* The drawer is a layered host, not a surface. An opaque background can cover
+   the chat list even while its own contents are inactive. Keep native stacking. */
+html[data-p5-desktop] :is(#pane-side,[data-testid="chat-list"],[data-testid="drawer-left"]) {
+  background: transparent !important;
+}
+html[data-p5-desktop] #side {border-inline-end: 1px solid var(--playera-pink)}
+/* The contact panel spans the full app height; inset paint preserves its width. */
+html[data-p5-desktop] #side {box-shadow: inset 2px 0 0 #f45b69 !important}
+html[data-p5-desktop] [data-testid="conversation-header"] {border-bottom: 1px solid var(--playera-pink)}
+html[data-p5-desktop] [data-testid="compose-box"] {border-top: 1px solid var(--playera-pink)}
+html[data-p5-desktop] :is([data-testid="conversation-panel-body"],[data-testid="intro-panel"]) {
+  background: var(--playera-background) var(--playera-wallpaper) center/cover no-repeat !important;
+}
+html[data-p5-desktop] [data-testid="conversation-background-default_chat_wallpaper"] {
+  background: rgb(0 0 0 / var(--playera-dim,0)) !important;
+  opacity: 1 !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+  pointer-events: none !important;
+}
+/* Fullscreen artwork has no transparent margins. */
+html[data-p5-desktop] [data-testid="conversation-panel-body"] {
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+html[data-p5-desktop] [data-testid="cell-frame-container"] {border-bottom: 1px solid #f45b69}
+html[data-p5-desktop] [data-testid="cell-frame-container"]:hover {background: #fbeaf1 !important}
+html[data-p5-desktop] [aria-selected="true"] [data-testid="cell-frame-container"] {background: #f5dce7 !important}
+/* Set colors on the list itself: WhatsApp can override inherited theme tokens. */
+html[data-p5-desktop] :is(#side,#pane-side,[data-testid="chat-list"]) {
+  color: var(--playera-contact) !important;
+  --primary: #4062bb !important;
+  --primary-strong: #4062bb !important;
+  --secondary: #52489c !important;
+  --text-primary: #4062bb !important;
+  --text-secondary: #52489c !important;
+  --WDS-content-default: #4062bb !important;
+  --WDS-content-default-RGB: 64,98,187 !important;
+  --WDS-content-deemphasized: #52489c !important;
+  --WDS-content-deemphasized-RGB: 82,72,156 !important;
+}
+html[data-p5-desktop] :is(#side,#pane-side,[data-testid="chat-list"]) :is(
+  [data-testid="cell-frame-title"], [data-testid="cell-frame-title"] *,
+  [data-testid="cell-frame-container"] span[title],
+  [data-testid="cell-frame-container"] [dir="auto"], h1, h2
+) {
+  color: var(--playera-contact) !important;
+  -webkit-text-fill-color: var(--playera-contact) !important;
+  text-shadow: none !important;
+}
+html[data-p5-desktop] :is(#side,#pane-side,[data-testid="chat-list"]) :is(
+  [data-testid="cell-frame-secondary"], [data-testid="cell-frame-secondary"] *,
+  [data-testid="cell-frame-primary-detail"], [data-testid="cell-frame-primary-detail"] span
+) {
+  color: var(--playera-secondary) !important;
+  -webkit-text-fill-color: var(--playera-secondary) !important;
+}
+/* Inset rings do not resize virtualized rows or move their contents. */
+html[data-p5-desktop] :is(#side,#pane-side,[data-testid="chat-list"]) [data-testid="cell-frame-container"]:hover {
+  box-shadow: inset 0 0 0 1px var(--playera-selection-border) !important;
+}
+html[data-p5-desktop] :is(#side,#pane-side,[data-testid="chat-list"]) :is(
+  [aria-selected="true"] [data-testid="cell-frame-container"],
+  [data-testid="cell-frame-container"][aria-selected="true"]
+) {
+  background: #f5dce7 !important;
+  box-shadow: inset 0 0 0 2px var(--playera-selection-border), inset 5px 0 0 var(--playera-selection-border) !important;
+}
+html[data-p5-desktop] :is(#side,#pane-side,[data-testid="chat-list"]) [data-testid="cell-frame-container"]:focus-within {
+  outline: 2px solid var(--playera-selection-border) !important;
+  outline-offset: -2px;
+}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] :is(input,[contenteditable="true"]) {
+  color: var(--playera-contact) !important;
+  -webkit-text-fill-color: var(--playera-contact) !important;
+  caret-color: var(--playera-contact);
+}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] input::placeholder {
+  color: var(--playera-secondary) !important;
+  -webkit-text-fill-color: var(--playera-secondary) !important;
+  opacity: 1;
+}
+html[data-p5-desktop] :is([data-testid="cell-frame-container"],[data-testid="conversation-header"]) img {
+  border-radius: 50%; outline: 2px solid var(--playera-pink); outline-offset: 2px;
+}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] > div {
+  background: #ebebeb !important; border: 1px solid var(--playera-pink); border-radius: 8px;
+}
+html[data-p5-desktop] [data-testid="filter-button"] button {
+  background: #e2f0fb !important; color: #493f49 !important; border: 1px solid #f45b69 !important;
+}
+html[data-p5-desktop] [data-testid="filter-button"] button:is([aria-selected="true"],[aria-pressed="true"]) {
+  background: #f5dce7 !important; border-color: var(--playera-pink) !important;
+}
+/* Keep native virtual-list dimensions and media layout. */
+html[data-p5-desktop] [data-testid="msg-container"] :is(.x1g5lz36,.x1ew7x2d):not(:has([data-testid="sticker-container"])) {
+  color: #493f49 !important; border: 1px solid var(--playera-pink); border-radius: 8px !important;
+  box-shadow: 0 1px 2px #52489c12 !important;
+}
+html[data-p5-desktop] [data-testid="msg-container"] .x1ew7x2d:not(:has([data-testid="sticker-container"])) {background: var(--playera-blue) !important}
+html[data-p5-desktop] [data-testid="msg-container"] .x1g5lz36:not(:has([data-testid="sticker-container"])) {background: var(--playera-green) !important}
+html[data-p5-desktop] [data-testid="msg-container"] .x1ew7x2d:not(:has([data-testid="sticker-container"])) {
+  color: #ffffff !important;
+  --WDS-content-default: #ffffff !important;
+  --WDS-content-default-RGB: 255,255,255 !important;
+  --WDS-content-deemphasized: #ece2d0 !important;
+  --WDS-content-deemphasized-RGB: 236,226,208 !important;
+  --WDS-systems-bubble-content-deemphasized: #ece2d0 !important;
+  --message-primary: #ffffff !important;
+  --bubble-meta: #ece2d0 !important;
+}
+html[data-p5-desktop] [data-testid="msg-container"] .x1ew7x2d > .selectable-text,
+html[data-p5-desktop] [data-testid="msg-container"] .x1ew7x2d .selectable-text:not([data-testid="quoted-message"] *) {
+  color: #ffffff !important;
+}
+/* Keep read receipts dark on cyan bubbles and light list surfaces. */
+html[data-p5-desktop] :is(#main,#side) {
+  --icon-ack: #061a40 !important;
+  --WDS-systems-bubble-content-ack: #061a40 !important;
+  --WDS-systems-bubble-content-ack-RGB: 6,26,64 !important;
+  --WDS-content-status-read: #061a40 !important;
+}
+html[data-p5-desktop] :is([data-icon="msg-check"],[data-icon="msg-dblcheck"],[data-icon="msg-time"]) {
+  color: #641b48 !important;
+}
+html[data-p5-desktop] :is([data-icon="msg-dblcheck-ack"],[data-testid="msg-dblcheck-ack"],[data-icon="msg-dblcheck"] [data-icon="msg-dblcheck-ack"]),
+html[data-p5-desktop] :is([data-icon="msg-dblcheck-ack"],[data-testid="msg-dblcheck-ack"]) svg {
+  color: #061a40 !important;
+}
+html[data-p5-desktop] :is([data-icon="msg-dblcheck-ack"],[data-testid="msg-dblcheck-ack"]) :is(path,polygon) {
+  fill: #061a40 !important;
+}
+html[data-p5-desktop] [data-testid="quoted-message"] {
+  background: #ebebeb !important; color: #493f49 !important; border-inline-start: 3px solid #f45b69 !important;
+}
+html[data-p5-desktop] [data-testid="conversation-compose-box-input"] {color: #493f49 !important; caret-color: #4062bb}
+html[data-p5-desktop] #p5-sound-controls, html[data-p5-desktop] #p5-sound-controls > div {
+  background: #ebebeb !important; color: #493f49 !important; border: 1px solid var(--playera-pink) !important;
+  border-radius: 8px; box-shadow: none !important; font-family: "Segoe UI", sans-serif;
+}
+html[data-p5-desktop] #p5-sound-controls summary {color: #52489c !important; background: #fbeaf1 !important; transform: none; box-shadow: none; border: 0}
+html[data-p5-desktop] #p5-sound-controls label {color: #493f49}
+html[data-p5-desktop] #p5-sound-controls > div {max-width: calc(100vw - 94px)}
+html[data-p5-desktop] #p5-sound-controls > div {max-height: calc(100vh - 90px); overflow-y: auto}
+html[data-p5-desktop] #p5-sound-controls button {background: #59c3c3 !important; color: #493f49 !important; border-color: var(--playera-pink) !important}
+html[data-p5-desktop] #p5-sound-controls input {accent-color: #4062bb}
+html[data-p5-desktop] #p5-sound-controls :is(strong,small) {color: #706470 !important}
+html[data-p5-desktop] :is(button,input,[contenteditable="true"]):focus-visible {outline: 2px solid #4062bb; outline-offset: 2px}
+html[data-p5-desktop] * {letter-spacing: 0}
+/* Keep the native title available to accessibility tools beneath the logo. */
+html[data-p5-desktop] [data-testid="chatlist-header"] [data-testid="drawer-title-body"] {
+  position: relative; min-width: 0; flex: 1 1 0%;
+  width: 240px; max-width: 100%; height: 58px;
+}
+html[data-p5-desktop] [data-testid="chatlist-header"] [data-testid="drawer-title-body"] :is(h1,h2) {opacity: 0}
+html[data-p5-desktop] [data-testid="chatlist-header"] [data-testid="drawer-title-body"]::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-size: contain; background-position: left center; background-repeat: no-repeat;
+}
+/* Scope the display font to message text; retain native controls and timestamps. */
+html[data-p5-desktop] [data-testid="msg-container"] .selectable-text,
+html[data-p5-desktop] [data-testid="msg-container"] .selectable-text :is(span,a,strong,em) {
+  font-family: "Playera Child Hood", "Segoe UI", sans-serif !important;
+  font-size: 18px; line-height: 1.4;
+}
+/* Anchor above the footer controls instead of after the upper navigation. */
+html[data-p5-desktop] [data-testid="navbar-footer-section"] {
+  position: relative;
+}
+html[data-p5-desktop] [data-testid="navbar-footer-section"]::before {
+  content: ""; display: block; position: absolute;
+  bottom: calc(100% + 8px); left: -12px; width: calc(100% + 24px);
+  aspect-ratio: 375 / 1417; pointer-events: none;
+  background-size: 100% auto; background-position: bottom center; background-repeat: no-repeat;
+}
+/* Include the navigation's padded outer surface, not just its narrow sections. */
+html[data-p5-desktop] :is(header,nav):has([data-testid="navbar-primary-section"]),
+html[data-p5-desktop] :is(div,nav,header):has(> [data-testid="navbar-primary-section"]),
+html[data-p5-desktop] :is(div,nav,header):has(> [data-testid="navbar-footer-section"]) {
+  background-color: #ece2d0 !important;
+}
+/* Paint every wrapper shared by the two navigation sections, including padding.
+   Exclude app-level ancestors that also contain the contact or chat panels. */
+html[data-p5-desktop] :is(div,nav,header,aside)
+  :is(div,nav,header,aside):has([data-testid="navbar-primary-section"]):has([data-testid="navbar-footer-section"]):not(:has(#side,#main,[data-testid="chat-list"])) {
+  background: #ece2d0 !important;
+  --WDS-components-surface-nav-bar: #ece2d0 !important;
+}
+html[data-p5-desktop] #main footer:has([data-testid="compose-box"]) {
+  background-color: #ece2d0; padding-bottom: 0; border-top: 1px solid #f45b69;
+}
+html[data-p5-desktop] #main footer:has([data-testid="compose-box"])::after {
+  content: ""; display: block; width: 100%; aspect-ratio: 20 / 1;
+  background-size: 100% auto; background-position: center; background-repeat: no-repeat;
+  pointer-events: none;
+}
+@media (max-height: 700px) {
+  html[data-p5-desktop] [data-testid="navbar-footer-section"]::before {
+    max-height: max(0px, calc(100vh - 490px));
+  }
+}
+html[data-p5-desktop], html[data-p5-desktop] body, html[data-p5-desktop] #app {
+  --playera-background: #ece2d0;
+  --WDS-surface-default: #ece2d0 !important;
+  --WDS-surface-default-RGB: 236,226,208 !important;
+  --WDS-background-wash-plain: #ece2d0 !important;
+  --WDS-components-surface-nav-bar: #ece2d0 !important;
+  --WDS-systems-chat-surface-composer: #ece2d0 !important;
+  --panel-background: #ece2d0 !important;
+  --background-default: #ece2d0 !important;
+  --input-background: #ece2d0 !important;
+}
+html[data-p5-desktop] :is([data-testid="conversation-header"],[data-testid="compose-box"],[data-testid="navbar-primary-section"],[data-testid="navbar-footer-section"]) {
+  background-color: #ece2d0 !important;
+}
+html[data-p5-desktop] #side {
+  --WDS-surface-default: #ebebeb !important;
+  --WDS-surface-default-RGB: 235,235,235 !important;
+  --background-default: #ebebeb !important;
+}
+html[data-p5-desktop] :is([data-testid="filter-button"] button,[data-navbar-item]):hover {
+  box-shadow: inset 0 0 0 2px #f45b69 !important;
+}
+html[data-p5-desktop] [data-testid="filter-button"] button * {color: #493f49 !important}
+html[data-p5-desktop] :is([role="separator"],hr) {border-color: #f45b69 !important; background-color: #f45b69 !important}

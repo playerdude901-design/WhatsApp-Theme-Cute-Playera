@@ -1,4 +1,16 @@
-# Persona 5 Theme para WhatsApp
+# Theme_Playera_Whatsapp
+
+Tema Cute Playera para WhatsApp oficial de Windows, con fuente Child Hood.
+
+**[Descargar instalador Playera](https://github.com/playerdude901-design/WhatsApp-Theme-Cute-Playera/releases/latest)**
+
+Consulta [instalacion y compilacion](README_PLAYERA.md) y [personalizacion](PERSONALIZACION.md).
+
+---
+
+## Documentacion historica del proyecto original
+
+Los enlaces y descripciones siguientes pertenecen a Persona 5, la base de esta adaptacion.
 
 ## Descargar para Windows
 

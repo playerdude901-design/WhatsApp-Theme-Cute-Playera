@@ -3,25 +3,22 @@ import {connect} from './cdp.mjs';
 import {installEffects, createMessageTracker} from './effects.mjs';
 
 export async function buildSource(lite = false) {
-  let css = await readFile(new URL('./persona.css', import.meta.url), 'utf8');
-  css += '\n' + await readFile(new URL('./persona-v2.css', import.meta.url), 'utf8');
-  css += '\n' + await readFile(new URL('./comic.css', import.meta.url), 'utf8');
-  css += '\n' + await readFile(new URL('./contrast.css', import.meta.url), 'utf8');
-  css += '\n' + await readFile(new URL('./effects.css', import.meta.url), 'utf8');
+  let css = await readFile(new URL('./effects.css', import.meta.url), 'utf8');
   const sounds={};
-  for(const name of ['chat','other']) sounds[name]='data:audio/mpeg;base64,'+(await readFile(new URL('./assets/message-'+name+'.mp3',import.meta.url))).toString('base64');
-  const wallpaper = await readFile(new URL('./assets/city-mono.jpg', import.meta.url));
-  css += '\nhtml[data-p5-desktop]{--p5-wallpaper:url("data:image/jpeg;base64,' + wallpaper.toString('base64') + '")}';
-  const assets = [];
-  for (const name of ['wordmark','sidebar-city','comic-edge','chat-badge']) {
-    const data = await readFile(new URL(`./assets/${name}.svg`, import.meta.url));
-    assets.push(`--p5-${name}:url("data:image/svg+xml;base64,${data.toString('base64')}");`);
+  for(const [name,file] of Object.entries({chat:'pop-5.mp3',other:'message-other.mp3'})) sounds[name]='data:audio/mpeg;base64,'+(await readFile(new URL('./assets/'+file,import.meta.url))).toString('base64');
+  css += '\n' + await readFile(new URL('./playera.css', import.meta.url), 'utf8');
+  const font = await readFile(new URL('./assets/Child Hood.otf', import.meta.url));
+  css += `\n@font-face{font-family:"Playera Child Hood";src:url("data:font/otf;base64,${font.toString('base64')}") format("opentype");font-weight:400;font-style:normal;font-display:swap;}`;
+  // Large images go directly into the property, avoiding custom-property size limits.
+  for (const [file, selector] of [
+    ['playera-fullscreen_HD.png', '[data-testid="conversation-panel-body"]'],
+    ['wordmark.png', '[data-testid="chatlist-header"] [data-testid="drawer-title-body"]::before'],
+    ['sidebar-dude.png', '[data-testid="navbar-footer-section"]::before'],
+    ['comic-edge_soft.png', '#main footer:has([data-testid="compose-box"])::after']
+  ]) {
+    const data = await readFile(new URL('./assets/' + file, import.meta.url));
+    css += `\nhtml[data-p5-desktop] ${selector}{background-image:url("data:image/png;base64,${data.toString('base64')}") !important}`;
   }
-  for (const name of ['img', 'img2', 'imgBGW']) {
-    const data = await readFile(new URL(`../icons/${name}.svg`, import.meta.url));
-    assets.push(`--p5-icon-${name}:url("data:image/svg+xml;base64,${data.toString('base64')}");`);
-  }
-  css += `\nhtml[data-p5-desktop]{${assets.join('')}}`;
   return `(() => {
     if (location.origin !== 'https://web.whatsapp.com' || window.top !== window) return;
     function install() {
@@ -107,6 +104,22 @@ export async function buildSource(lite = false) {
   })();`;
 }
 
+export async function evaluateWhenReady(client, source, timeoutMs = 15000, retryMs = 250) {
+  const deadline = Date.now() + timeoutMs;
+  while (true) {
+    try {
+      const result = await client.send('Runtime.evaluate', {expression:source});
+      if (result.exceptionDetails) throw Error('No se pudo insertar el tema');
+      return;
+    } catch (error) {
+      // WebView2 exposes its target before the initial document has a context.
+      const transient = /cannot find (?:default execution context|context with specified id)|execution context was destroyed|inspected target navigated/i.test(error.message);
+      if (!transient || Date.now() >= deadline) throw error;
+      await new Promise(resolve => setTimeout(resolve, retryMs));
+    }
+  }
+}
+
 export async function applyTheme(port, lite = false, startup = false) {
   const source = await buildSource(lite);
   const deadline = Date.now() + (startup ? 90000 : 35000);
@@ -120,8 +133,7 @@ export async function applyTheme(port, lite = false, startup = false) {
   try {
     await client.send('Page.enable');
     await client.send('Page.addScriptToEvaluateOnNewDocument', {source});
-    const result = await client.send('Runtime.evaluate', {expression:source});
-    if (result.exceptionDetails) throw Error('No se pudo insertar el tema');
+    await evaluateWhenReady(client, source);
     // First activation may expose the page before DOMContentLoaded.
     let installed = false;
     const verifyDeadline = Date.now() + 15000;
@@ -137,7 +149,7 @@ export async function applyTheme(port, lite = false, startup = false) {
       await new Promise(resolve => setTimeout(resolve,250));
     }
     if (!installed) throw Error('No se pudo verificar el tema');
-    console.log('Tema Persona 5 aplicado a WhatsApp oficial.');
+    console.log('Theme_Playera_Whatsapp aplicado a WhatsApp oficial.');
   } finally { client.close(); }
 }
 

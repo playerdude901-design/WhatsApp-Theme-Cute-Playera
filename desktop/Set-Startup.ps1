@@ -4,10 +4,10 @@ if (!$startupFolder) {
     if ($Disable) { Write-Output 'Windows no proporciona carpeta de inicio automatico; no se realizaron cambios.'; return }
     throw 'Windows no proporciona la carpeta de inicio automatico. El tema no se configurara para arrancar con Windows.'
 }
-$shortcutPath = Join-Path $startupFolder 'WhatsApp Persona 5.lnk'
+$shortcutPath = Join-Path $startupFolder 'Theme_Playera_Whatsapp.lnk'
 if ($Disable) {
     if (Test-Path -LiteralPath $shortcutPath) { Remove-Item -LiteralPath $shortcutPath }
-    Write-Output 'Inicio automatico de Persona 5 desactivado.'
+    Write-Output 'Inicio automatico de Theme_Playera_Whatsapp desactivado.'
     return
 }
 New-Item -ItemType Directory -Path $startupFolder -Force | Out-Null
@@ -17,8 +17,8 @@ try {
     $shortcut.TargetPath = "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe"
     $shortcut.Arguments = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + (Join-Path $PSScriptRoot 'Start-WhatsApp.ps1') + '" -Startup'
     $shortcut.WorkingDirectory = $PSScriptRoot
-    $shortcut.Description = 'Abre WhatsApp con Persona 5 al iniciar sesion en Windows'
-    $shortcut.IconLocation = (Join-Path $PSScriptRoot 'assets\persona.ico') + ',0'
+    $shortcut.Description = 'Abre WhatsApp con Theme_Playera_Whatsapp al iniciar sesion en Windows'
+    $shortcut.IconLocation = (Join-Path $PSScriptRoot 'assets\playera.ico') + ',0'
     $shortcut.WindowStyle = 7
     $shortcut.Save()
     Write-Output $shortcutPath

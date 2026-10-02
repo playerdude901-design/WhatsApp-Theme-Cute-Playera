@@ -1,4 +1,10 @@
 param([switch]$Force)
+# This fork has no release feed yet; upstream releases belong to Persona 5.
+if ($Force) {
+    Add-Type -AssemblyName System.Windows.Forms
+    [System.Windows.Forms.MessageBox]::Show('Theme_Playera_Whatsapp aun no tiene un repositorio de actualizaciones configurado.','Theme_Playera_Whatsapp') | Out-Null
+}
+return
 $ErrorActionPreference = 'Stop'
 $lock = [System.Threading.Mutex]::new($false,'Local\WhatsAppPersona5Updates')
 if (!$lock.WaitOne(0)) { $lock.Dispose(); exit }

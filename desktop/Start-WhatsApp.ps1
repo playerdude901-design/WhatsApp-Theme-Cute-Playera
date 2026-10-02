@@ -1,6 +1,6 @@
 param([switch]$Normal, [switch]$Lite, [switch]$Startup)
 $ErrorActionPreference = 'Stop'
-$logDirectory = Join-Path $env:LOCALAPPDATA 'WhatsAppPersona5'
+$logDirectory = Join-Path $env:LOCALAPPDATA 'Theme_Playera_Whatsapp'
 $logPath = Join-Path $logDirectory 'launch.log'
 function Write-LaunchLog([string]$Message) {
     try {
@@ -14,7 +14,7 @@ function Write-LaunchLog([string]$Message) {
 Write-LaunchLog "Launch requested; startup=$Startup; normal=$Normal"
 # Allow Windows time to restore Store apps and their WebView processes.
 if ($Startup) { Start-Sleep -Seconds 30 }
-$launchLock = [System.Threading.Mutex]::new($false, 'Local\WhatsAppPersona5Launcher')
+$launchLock = [System.Threading.Mutex]::new($false, 'Local\Theme_Playera_WhatsappLauncher')
 $ownsLock = $false
 try {
     try { $ownsLock = $launchLock.WaitOne(0) }
@@ -80,7 +80,7 @@ try {
         } catch { Write-LaunchLog ('Normal activation also failed: ' + $_.Exception.Message) }
     }
     Add-Type -AssemblyName System.Windows.Forms
-    [System.Windows.Forms.MessageBox]::Show(($reason + "`n`nRegistro del arranque: " + $logPath), 'WhatsApp Persona 5') | Out-Null
+    [System.Windows.Forms.MessageBox]::Show(($reason + "`n`nRegistro del arranque: " + $logPath), 'Theme_Playera_Whatsapp') | Out-Null
     exit 1
 } finally {
     if ($ownsLock) { $launchLock.ReleaseMutex() }

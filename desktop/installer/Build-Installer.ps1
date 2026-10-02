@@ -12,7 +12,7 @@ Copy-Item -LiteralPath $NodePath -Destination "$payload\desktop\runtime\node.exe
 Copy-Item -LiteralPath "$repoRoot\desktop\assets\NODE-LICENSE.txt" -Destination "$payload\desktop\runtime\LICENSE.txt"
 Get-ChildItem "$repoRoot\desktop" -File | Where-Object { $_.Extension -in '.ps1','.mjs','.css','.json','.md','.cs' } | Copy-Item -Destination "$payload\desktop"
 & "$repoRoot\desktop\Build-NotificationPopup.ps1" -OutputPath "$payload\desktop\NotificationPopup.exe"
-foreach($name in @('city-mono.jpg','wordmark.svg','sidebar-city.svg','comic-edge.svg','chat-badge.svg','persona.ico','message-chat.mp3','message-other.mp3')) { Copy-Item -LiteralPath "$repoRoot\desktop\assets\$name" -Destination "$payload\desktop\assets\$name" }
+foreach($name in @('playera-fullscreen_HD.png','wordmark.png','sidebar-dude.png','comic-edge_soft.png','Child Hood.otf','playera.ico','pop-5.mp3','message-other.mp3')) { Copy-Item -LiteralPath "$repoRoot\desktop\assets\$name" -Destination "$payload\desktop\assets\$name" }
 foreach($name in @('img.svg','img2.svg','imgBGW.svg')) { Copy-Item -LiteralPath "$repoRoot\icons\$name" -Destination "$payload\icons\$name" }
 Copy-Item -Path "$PSScriptRoot\*.ps1","$PSScriptRoot\*.cs" -Destination "$payload\desktop\installer"
 Copy-Item -LiteralPath "$repoRoot\LICENSE" -Destination "$payload\LICENSE"
@@ -24,10 +24,10 @@ if($LASTEXITCODE -ne 0){throw 'Pruebas fallidas.'}
 Get-ChildItem $payload -Filter *.ps1 -Recurse | ForEach-Object { $tokens=$null;$errors=$null;[void][Management.Automation.Language.Parser]::ParseFile($_.FullName,[ref]$tokens,[ref]$errors);if($errors){throw ($errors|Out-String)} }
 $zip=Join-Path $stage 'package.zip'
 Compress-Archive -Path "$stage\payload","$stage\files.json","$stage\Install.ps1" -DestinationPath $zip
-$exe=Join-Path $OutputDirectory 'WhatsApp-Persona5-Instalar.exe'
-& "$env:SystemRoot\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /nologo /platform:x64 /target:winexe "/win32icon:$repoRoot\desktop\assets\persona.ico" /reference:System.Windows.Forms.dll /reference:System.Drawing.dll /reference:System.IO.Compression.dll /reference:System.IO.Compression.FileSystem.dll "/resource:$zip,package.zip" "/out:$exe" "$PSScriptRoot\Setup.cs"
+$exe=Join-Path $OutputDirectory 'Theme_Playera_Whatsapp-Instalar.exe'
+& "$env:SystemRoot\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /nologo /platform:x64 /target:winexe "/win32icon:$repoRoot\desktop\assets\playera.ico" /reference:System.Windows.Forms.dll /reference:System.Drawing.dll /reference:System.IO.Compression.dll /reference:System.IO.Compression.FileSystem.dll "/resource:$zip,package.zip" "/out:$exe" "$PSScriptRoot\Setup.cs"
 if($LASTEXITCODE -ne 0){throw 'Compilacion fallida.'}
 $p=Start-Process -FilePath $exe -ArgumentList '--verify' -WindowStyle Hidden -Wait -PassThru
 if($p.ExitCode -ne 0){throw 'El instalador no paso la verificacion interna.'}
-((Get-FileHash -LiteralPath $exe -Algorithm SHA256).Hash.ToLowerInvariant()+'  WhatsApp-Persona5-Instalar.exe') | Set-Content -Encoding ascii ($exe+'.sha256')
+((Get-FileHash -LiteralPath $exe -Algorithm SHA256).Hash.ToLowerInvariant()+'  Theme_Playera_Whatsapp-Instalar.exe') | Set-Content -Encoding ascii ($exe+'.sha256')
 Write-Output $exe

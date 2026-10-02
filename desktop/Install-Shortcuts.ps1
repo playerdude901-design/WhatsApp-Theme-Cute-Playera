@@ -4,16 +4,16 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 if (!$ProgramsDirectory) { throw 'No se encontro el menu Inicio de este usuario.' }
-$startMenu = Join-Path $ProgramsDirectory 'WhatsApp Persona 5'
+$startMenu = Join-Path $ProgramsDirectory 'Theme_Playera_Whatsapp'
 New-Item -ItemType Directory -Path $startMenu -Force | Out-Null
 $shell = New-Object -ComObject WScript.Shell
 try {
     $package = Get-AppxPackage 5319275A.WhatsAppDesktop
     foreach ($entry in @(
-        @{Name='WhatsApp Persona 5';Args='';Description='WhatsApp oficial con tema Persona 5 y efectos breves'},
-        @{Name='WhatsApp Persona 5 - Ligero';Args=' -Lite';Description='WhatsApp oficial con tema Persona 5 sin transiciones'},
+        @{Name='Theme_Playera_Whatsapp';Args='';Description='WhatsApp oficial con tema Theme_Playera_Whatsapp y efectos breves'},
+        @{Name='Theme_Playera_Whatsapp - Ligero';Args=' -Lite';Description='WhatsApp oficial con tema Theme_Playera_Whatsapp sin transiciones'},
         @{Name='WhatsApp - Restaurar normal';Args=' -Normal';Description='Reinicia WhatsApp sin tema ni depuracion local'},
-        @{Name='WhatsApp Persona 5 - Buscar actualizaciones';Args=' -Force';Script='Update-WhatsApp.ps1';Description='Busca nuevas versiones del tema en GitHub'}
+        @{Name='Theme_Playera_Whatsapp - Buscar actualizaciones';Args=' -Force';Script='Update-WhatsApp.ps1';Description='Busca nuevas versiones del tema en GitHub'}
     )) {
         # Inicio es independiente del escritorio: este puede faltar o estar protegido.
         $link = Join-Path $startMenu ($entry.Name + '.lnk')
@@ -25,7 +25,7 @@ try {
             $shortcut.WorkingDirectory = $PSScriptRoot
             $shortcut.Description = $entry.Description
             $shortcut.WindowStyle = 7
-            if ($entry.Args -ne ' -Normal') { $shortcut.IconLocation = (Join-Path $PSScriptRoot 'assets\persona.ico') + ',0' }
+            if ($entry.Args -ne ' -Normal') { $shortcut.IconLocation = (Join-Path $PSScriptRoot 'assets\playera.ico') + ',0' }
             elseif ($package) { $shortcut.IconLocation = (Join-Path $package.InstallLocation 'WhatsApp.Root.exe') + ',0' }
             $shortcut.Save()
         } finally { [void][Runtime.InteropServices.Marshal]::ReleaseComObject($shortcut) }

@@ -16,7 +16,7 @@ try {
     if (![Environment]::Is64BitOperatingSystem) { throw 'Este paquete requiere Windows de 64 bits.' }
     if (!(Get-AppxPackage 5319275A.WhatsAppDesktop)) { throw 'Instala primero WhatsApp oficial desde Microsoft Store e inicia sesion.' }
     $message = @"
-Instalar el tema Persona 5 para WhatsApp oficial.
+Instalar el tema Theme_Playera_Whatsapp para WhatsApp oficial.
 
 Se guardara en tu carpeta local de programas y creara accesos en el menu Inicio y, si esta disponible, en el escritorio. Incluye Node.js; no necesitas instalarlo aparte. No incluye ni copia conversaciones o sesiones.
 
@@ -26,8 +26,8 @@ Adaptacion no oficial. Las actualizaciones de WhatsApp pueden requerir actualiza
 
 Deseas instalarlo?
 "@
-    if (!$Silent -and [System.Windows.Forms.MessageBox]::Show($message,'WhatsApp Persona 5 - Instalador','YesNo','Information') -ne 'Yes') { exit 0 }
-    $destination = Join-Path $env:LOCALAPPDATA 'Programs\WhatsAppPersona5'
+    if (!$Silent -and [System.Windows.Forms.MessageBox]::Show($message,'Theme_Playera_Whatsapp - Instalador','YesNo','Information') -ne 'Yes') { exit 0 }
+    $destination = Join-Path $env:LOCALAPPDATA 'Programs\Theme_Playera_Whatsapp'
     # Cerrar unicamente los componentes de la instalacion que se actualiza.
     $installedHelpers = @((Join-Path $destination 'desktop\NotificationPopup.exe'), (Join-Path $destination 'desktop\runtime\node.exe'))
     Get-CimInstance Win32_Process | Where-Object { $_.ExecutablePath -and $_.ExecutablePath -in $installedHelpers } | ForEach-Object {
@@ -78,7 +78,7 @@ Deseas instalarlo?
         if (!$Silent) { [System.Windows.Forms.MessageBox]::Show($detail,'Instalacion con pendientes','OK','Warning') | Out-Null }
         exit 2
     }
-    if (!$Silent) { [System.Windows.Forms.MessageBox]::Show('Instalado. Abre WhatsApp Persona 5 desde el menu Inicio o el escritorio. El modo Ligero desactiva animaciones. Para volver a WhatsApp sin depuracion, usa Restaurar normal.','Instalacion completa','OK','Information') | Out-Null }
+    if (!$Silent) { [System.Windows.Forms.MessageBox]::Show('Instalado. Abre Theme_Playera_Whatsapp desde el menu Inicio o el escritorio. El modo Ligero desactiva animaciones. Para volver a WhatsApp sin depuracion, usa Restaurar normal.','Instalacion completa','OK','Information') | Out-Null }
 } catch {
     $failure = $_
     $report = @(

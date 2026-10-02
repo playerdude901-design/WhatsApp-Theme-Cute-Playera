@@ -107,10 +107,27 @@ export function installEffects(config, createTracker) {
   function stopMotion(){for(const a of motion)a.cancel();motion.clear();}
   // Small local controls; preferences contain no chat data.
   const controls=document.createElement('details'); controls.id='p5-sound-controls';
-  controls.innerHTML='<summary title="Opciones Persona 5">♪ P5</summary><div><strong>OPCIONES PERSONA 5</strong><label><input type="checkbox" data-option="banners"> Mostrar avisos en escritorio</label><label><input type="checkbox" data-option="personaNotices"> Usar estilo Persona 5</label><label><input type="checkbox" data-option="sound"> Activar sonidos</label><label><input type="checkbox" data-option="clicks"> Clic al cambiar de chat</label><label>Volumen <input type="range" min="0" max="100" aria-label="Volumen Persona 5"></label><button type="button">Probar sonido</button><small>Sin estilo Persona 5 se usan los avisos normales de WhatsApp. Ocultar avisos conserva los mensajes en el centro de notificaciones.</small></div>';
+  controls.innerHTML='<summary title="Opciones Theme_Playera_Whatsapp">♪ Playera</summary><div><strong>OPCIONES PLAYERA</strong><label><input type="checkbox" data-option="banners"> Mostrar avisos en escritorio</label><label><input type="checkbox" data-option="personaNotices"> Usar estilo Theme_Playera_Whatsapp</label><label><input type="checkbox" data-option="sound"> Activar sonidos</label><label><input type="checkbox" data-option="clicks"> Clic al cambiar de chat</label><label>Volumen <input type="range" min="0" max="100" aria-label="Volumen Theme_Playera_Whatsapp"></label><button type="button">Probar sonido</button><small>Sin estilo Theme_Playera_Whatsapp se usan los avisos normales de WhatsApp. Ocultar avisos conserva los mensajes en el centro de notificaciones.</small></div>';
   for(const name of ['sound','clicks','banners','personaNotices']){const input=controls.querySelector('[data-option="'+name+'"]');input.checked=prefs[name];input.onchange=()=>{prefs[name]=input.checked;save();};}
   function reloadPrefs(){try{const saved=JSON.parse(localStorage.getItem(key));if(saved){prefs={...prefs,...saved};for(const name of ['sound','clicks','banners','personaNotices'])controls.querySelector('[data-option="'+name+'"]').checked=prefs[name]!==false;}}catch{}}
   window.addEventListener('p5-preferences',reloadPrefs);
+  const backgroundKey='playera-background-v1';
+  let darkness=0;
+  try {const saved=JSON.parse(localStorage.getItem(backgroundKey));if(Number.isFinite(saved?.darkness))darkness=Math.max(0,Math.min(80,saved.darkness));}catch{}
+  const backgroundLabel=document.createElement('label');
+  backgroundLabel.textContent='Oscurecer fondo ';
+  const backgroundValue=document.createElement('output');
+  const backgroundRange=document.createElement('input');
+  backgroundRange.type='range';backgroundRange.min='0';backgroundRange.max='80';backgroundRange.step='1';
+  backgroundRange.setAttribute('aria-label','Oscurecer fondo');backgroundRange.value=String(darkness);
+  function updateBackground(){
+    document.documentElement.style.setProperty('--playera-dim',String(darkness/100));
+    backgroundValue.textContent=darkness+'%';
+    backgroundRange.setAttribute('aria-valuetext',darkness===0?'Sin oscurecer':darkness+'%');
+  }
+  backgroundRange.oninput=()=>{darkness=Number(backgroundRange.value);updateBackground();try{localStorage.setItem(backgroundKey,JSON.stringify({darkness}));}catch{}};
+  backgroundLabel.appendChild(backgroundValue);backgroundLabel.appendChild(backgroundRange);
+  controls.querySelector('div').appendChild(backgroundLabel);updateBackground();
   const volume=controls.querySelector('[type="range"]');volume.value=prefs.volume*100;volume.oninput=()=>{prefs.volume=Number(volume.value)/100;save();};
   controls.querySelector('button').onclick=()=>play('chat');document.body.appendChild(controls);
   document.addEventListener('click',click,true);document.addEventListener('scroll',scroll,true);
